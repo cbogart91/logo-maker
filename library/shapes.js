@@ -12,7 +12,7 @@ class Circle extends Shape {
         super();
     }
         render() {
-        return `<circle="150" cy="100" r="95" fill="${this.color}"/>`
+        return `<circle cx="150" cy="100" r="95" fill="${this.color}"/>`
     }
 };
 
