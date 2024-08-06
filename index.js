@@ -12,7 +12,7 @@ const questions = [
   {
     type: 'list',
     name: 'textColor',
-    message: 'Please select a color',
+    message: 'Please select a color for your characters',
     choices: ['Red', 'Green', 'Yellow']
   },
   {
@@ -21,39 +21,46 @@ const questions = [
     message: 'Please select a shape',
     choices: ['Circle', 'Triangle', 'Square']
   },
-  // {
-  //   type: 'input',
-  //   name: 'shapeColor',
-  //   message: 'Please enter the color for the shape'
-  // },
+  {
+    type: 'input',
+    name: 'shapeColor',
+    message: 'Please enter a color for the shape'
+  },
 ];
 
 inquirer
-.prompt(questions)
-.then((answers) => {
+  .prompt(questions)
+  .then((answers) => {
+    console.log('Selected shape:', answers.shape);
+    
   let shape;
-  if (answers.shape === 'circle'){
-    shape = new Circle()
+  switch (answers.shape){
+    case 'Circle':
+      shape = new Circle();
+      break;
+    case 'Square':
+      shape = new Square();
+      break;
+    case 'Triangle':
+      shape = new Triangle();
+      break;  
+    default:
+      throw new Error('Invalid shape');
   }
-  if (answers.shape === 'square'){
-    shape = new Square()
-  }
-  if (answers.shape === 'triangle'){
-    shape = new Triangle()
-  }
-  // shape.setColor(answers.shapeColor)
+
+shape.setColor(answers.shapeColor);
 
   const svgFile = `<svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
- 
-   <text x="150" y="125" font-size="60" text-anchor="middle" fill="${answers.textColor}">${answers.text}</text>
-  </svg>`
+  ${shape.render()}
+   <text x="150" y="125" font-size="60" text-anchor="middle" fill="${answers.textColor}">${answers.username}</text>
+  </svg>`;
 
 
   fs.writeFile('SVG-Generator.svg', svgFile, (err) => {
     if (err) throw err;
     console.log('File was saved!');
+  })
   });
-})
-
-
-
+// .catch((error) => {
+//   console.error('Error:', error);
+// })
